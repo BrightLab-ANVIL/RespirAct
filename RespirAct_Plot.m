@@ -103,10 +103,10 @@ avPETCO2=mean(ETCO2(ET_Sindex:ET_Eindex,1));
 stdevPETCO2=std(ETCO2(ET_Sindex:ET_Eindex,1));
 targetavPETCO2=mean(Desired_ETCO2(ET_Sindex:ET_Eindex,1));
 targetstdevPETCO2=std(Desired_ETCO2(ET_Sindex:ET_Eindex,1));
-sprintf('targetPETCO2 = %0.5f, std = %0.5f, avPETCO2 = %0.5f, std = %0.5f',targetavPETCO2,targetstdevPETCO2, avPETCO2,stdevPETCO2)
+sprintf('desiredPETCO2_mean = %0.5f, desiredPETCO2_std = %0.5f, achievedPETCO2_mean = %0.5f, achievedPETCO2_std = %0.5f',targetavPETCO2,targetstdevPETCO2, avPETCO2,stdevPETCO2)
 
 avPETO2=mean(ETO2(ET_Sindex:ET_Eindex,1));
 stdevPETO2=std(ETO2(ET_Sindex:ET_Eindex,1));
 targetavPETO2=mean(Desired_ETO2(ET_Sindex:ET_Eindex,1));
 targetstdevPETO2=std(Desired_ETO2(ET_Sindex:ET_Eindex,1));
-sprintf('targetPETO2 = %0.5f, std = %0.5f, avPETO2 = %0.5f, std = %0.5f',targetavPETO2,targetstdevPETO2, avPETO2,stdevPETO2)
+sprintf('desiredPETO2_mean = %0.5f, desiredPETO2_std = %0.5f, achievedPETO2_mean = %0.5f, achievedPETO2_std = %0.5f',targetavPETO2,targetstdevPETO2, avPETO2,stdevPETO2)
