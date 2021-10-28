@@ -1,18 +1,24 @@
 function RespirAct_Plot(data_dir,subID,start_name,start_row,end_name,end_row,sequence_length)
-% RespirAct_Plot(data_dir,start_name,start_row,end_name,end_row)
-% e.g. RespirAct_Plot('/mydata/blockCO2/','SequenceStart',2,'SequenceEnd',5)
-% Plots the CO2 and CO2 traces and overlays the end-tidal peaks that the RespirAct outputs
-% By Rachael Stickland, 2021
+% RespirAct_Plot(data_dir,subID,start_name,start_row,end_name,end_row,sequence_length)
+% e.g. RespirAct_Plot('/mydata/blockCO2/','sub-01_Run1','SequenceStart',2,'SequenceEnd',5,[])
+% OR
+% e.g. RespirAct_Plot('/mydata/blockCO2/','sub-01_Run1','SequenceStart',2,[],[],300)
+%
+% Plots the CO2 and CO2 traces and overlays the end-tidal peaks that the RespirAct found
+% Asks for two events (start and end) and only processes data between these
+% events. OR asks just for a start event and a length of time (sequence_length)
+%
+% INPUTS:
 %
 % data_dir = path to your data directory (which contains the txt files RGM, EndTidal and Events)
 % subID = subject ID for figure title
-
-% start_name = name of the first time stamp e.g. 'Sequence Start'
+% start_name = name of the first event e.g. 'Sequence Start'
 % start_row = row number of this start_name in Events.txt (header information is row 1)
-
-% end_name = name of the end time stamp e.g. 'Sequence End', or leave blank []
+% end_name = name of the end event e.g. 'Sequence End', or leave blank []
 % end_row = row number of this end_name in Events.txt (header information is row 1), or leave blank []
 % sequence_length = in seconds, use instead of end_name and end_row if there are no end markers, or leave blank [].
+%
+% By Rachael Stickland, 2021
 
 %% Read in the data
 
@@ -51,6 +57,7 @@ else
 end
 
 %% Find the sequence start and end time indices
+
 % RGM_Time_Protocol = RGM_Time > start_index;
 % RGM_Sindex = find(RGM_Time_Protocol,1,'first');
 % RGM_Time_Protocol = RGM_Time < end_index;
@@ -70,7 +77,7 @@ subplot(2,1,1) %C02
 plot(ETCO2(ET_Sindex:ET_Eindex,1),'o-')
 hold on
 plot(Desired_ETCO2(ET_Sindex:ET_Eindex,1),'o-')
-ylabel('ETC02 mmHg','FontSize',15)
+ylabel('ETCO2 mmHg','FontSize',15)
 ylim([20,60]) %hardcoded to remove outlier breaths
 legend('Achieved','Desired')
 
@@ -83,11 +90,11 @@ subplot(2,1,2) %02
 plot(ETO2(ET_Sindex:ET_Eindex,1),'o')
 hold on
 plot(Desired_ETO2(ET_Sindex:ET_Eindex,1),'o')
-ylabel('ET02 mmHg','FontSize',15)
+ylabel('ETO2 mmHg','FontSize',15)
 ylim([80,140]) %hardcoded to remove outlier breaths
 legend('Achieved','Desired')
 
-%% Output to window
+%% Output to command window
 
 Time_seconds=end_index - start_index;
 sprintf('Acquisition Time (seconds) = %0.5f', Time_seconds)
@@ -95,17 +102,11 @@ sprintf('Acquisition Time (seconds) = %0.5f', Time_seconds)
 avPETCO2=mean(ETCO2(ET_Sindex:ET_Eindex,1));
 stdevPETCO2=std(ETCO2(ET_Sindex:ET_Eindex,1));
 targetavPETCO2=mean(Desired_ETCO2(ET_Sindex:ET_Eindex,1));
-%targetavPETCO2=nanmean(Desired_ETCO2(ET_Sindex:ET_Eindex,1));
 targetstdevPETCO2=std(Desired_ETCO2(ET_Sindex:ET_Eindex,1));
-%targetstdevPETCO2=nanstd(Desired_ETCO2(ET_Sindex:ET_Eindex,1));
-
 sprintf('targetPETCO2 = %0.5f, std = %0.5f, avPETCO2 = %0.5f, std = %0.5f',targetavPETCO2,targetstdevPETCO2, avPETCO2,stdevPETCO2)
 
 avPETO2=mean(ETO2(ET_Sindex:ET_Eindex,1));
 stdevPETO2=std(ETO2(ET_Sindex:ET_Eindex,1));
 targetavPETO2=mean(Desired_ETO2(ET_Sindex:ET_Eindex,1));
-%targetavPETO2=nanmean(Desired_ETO2(ET_Sindex:ET_Eindex,1));
 targetstdevPETO2=std(Desired_ETO2(ET_Sindex:ET_Eindex,1));
-%targetstdevPETO2=nanstd(Desired_ETO2(ET_Sindex:ET_Eindex,1));
-
 sprintf('targetPETO2 = %0.5f, std = %0.5f, avPETO2 = %0.5f, std = %0.5f',targetavPETO2,targetstdevPETO2, avPETO2,stdevPETO2)
